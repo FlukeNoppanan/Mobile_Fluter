@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -240,10 +242,6 @@ class _MyWidgetState extends State<MyWidget> {
                       if (operation.isEmpty) {
                         number1 += "0";
                         showValues = number1;
-                      } else if (number1.isNotEmpty &&
-                          operation.isNotEmpty &&
-                          number2.isNotEmpty) {
-                        // Do nothing to prevent multiple zeros after calculation
                       } else {
                         number2 += "0";
                         showValues = number2;
@@ -275,9 +273,9 @@ class _MyWidgetState extends State<MyWidget> {
                     setState(() {
                       if (number1 == "" || number2 == "") return;
 
-                      double newNum1 = double.parse(number1);
-                      double newNum2 = double.parse(number2);
-                      double result = 0;
+                      int newNum1 = int.parse(number1);
+                      int newNum2 = int.parse(number2);
+                      int result = 0;
 
                       if (operation == "+") {
                         result = newNum1 + newNum2;
@@ -286,8 +284,13 @@ class _MyWidgetState extends State<MyWidget> {
                       } else if (operation == "*") {
                         result = newNum1 * newNum2;
                       } else if (operation == "/") {
-                        result = newNum1 / newNum2;
-                      }
+                        result = newNum1 ~/ newNum2;
+                      } else if (operation == "^") {
+                        result = pow(newNum1, newNum2).toInt();
+                        } else if (operation == "%") {
+                        result = (newNum1 * newNum2) ~/ 100;
+                        }
+
                       showValues = result.toString();
                       number1 = result.toString();
                       number2 = "";
@@ -306,6 +309,72 @@ class _MyWidgetState extends State<MyWidget> {
                   child: const Text("/", style: TextStyle(fontSize: 30)),
                 ),
                 // SizedBox(width: 20),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FloatingActionButton(
+                  backgroundColor: Colors.blue,
+                  onPressed: () {
+                    setState(() {
+                      if (operation.isEmpty && number1.isNotEmpty) {
+                        number1 =
+                            number1.substring(0, number1.length - 1);
+                        showValues = number1.isEmpty ? "0" : number1;
+                      } else if (operation.isNotEmpty &&
+                          number2.isNotEmpty) {
+                        number2 =
+                            number2.substring(0, number2.length - 1);
+                        showValues = number2.isEmpty ? "0" : number2;
+                      }
+                    });
+                  },
+                  child: const Text("DEL", style: TextStyle(fontSize: 30, color: Colors.white)),
+                ),SizedBox(width: 20),
+                FloatingActionButton(
+                  backgroundColor: Colors.red,
+                  onPressed: () {
+                    setState(() {
+                      operation = "%";
+                    });
+                  },
+                  child: const Text("%", style: TextStyle(fontSize: 30, color: Colors.white)),
+                ),SizedBox(width: 20),
+                FloatingActionButton(
+                  backgroundColor: Colors.red,
+                  onPressed: () {
+                    setState(() {
+                      operation = "^";
+                    });
+                  },
+                  child: const Text("^", style: TextStyle(fontSize: 30, color: Colors.white)),
+                ),SizedBox(width: 20),
+                FloatingActionButton(
+                  backgroundColor: Colors.red,
+                  onPressed: () {
+                    setState(() {
+                      if (operation.isEmpty && number1.isNotEmpty) {
+                        double num = double.parse(number1);
+                        if (num >= 0) {
+                          num = sqrt(num);
+                          number1 = num.toString();
+                          showValues = number1;
+                        }
+                      } else if (operation.isNotEmpty &&
+                          number2.isNotEmpty) {
+                        double num = double.parse(number2);
+                        if (num >= 0) {
+                          num = sqrt(num);
+                          number2 = num.toString();
+                          showValues = number2;
+                        }
+                      }
+                    });
+                  },
+                  child: const Text("√", style: TextStyle(fontSize: 30, color: Colors.white)),
+                ),
               ],
             ),
           ],
