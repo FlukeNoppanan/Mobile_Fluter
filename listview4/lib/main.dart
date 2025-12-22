@@ -10,11 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'FLUKE FOOD MENU'),
     );
   }
 }
@@ -28,19 +29,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  List<Foolmenu> menus = [
-    Foolmenu("กุ้งเผา", "900"),
-    Foolmenu("ปลาหมึกย่าง", "500"),
-    Foolmenu("กระเพรา", "200"),
-    Foolmenu("สามชั้นทอด", "200"),
-    Foolmenu("ไข่เจียว", "2000"),
-  ];
+  int tep = 0;
+  int sum = 0;
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -51,12 +44,59 @@ class _MyHomePageState extends State<MyHomePage> {
         itemBuilder: (BuildContext context, int index) {
           Foolmenu food = menus[index];
           return ListTile(
-            title: Text("Menu ${index + 1}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue)),
-            subtitle: Text("${food.foolname} ราคา ${food.foolprice} บาท", style: TextStyle(fontSize: 18, color: Colors.black54)),
+            leading: Image.asset(
+              food.foolimage,
+              width: 80,
+              height: 80,
+              fit: BoxFit.cover,
+            ),
+            title: Text(
+              "${food.foolname} ประเภท ${food.fooltype}",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: const Color.fromARGB(255, 6, 6, 6),
+              ),
+            ),
+            subtitle: Center(
+              child: Text(
+                "ราคา ${food.foolprice} บาท",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: const Color.fromARGB(137, 112, 111, 111),
+                ),
+              ),
+            ),
+            onTap: () {
+              tep++;
+              sum += int.parse(food.foolprice);
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("ปิด"),
+                      ),
+                    ],
+                    title: Text(
+                      "เมนูที่เลือกคือ ${food.foolname} ประเภท ${food.fooltype}",
+                    ),
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Text("จำนวน ${tep} จาน \nราคา ${sum}")],
+                    ),
+                  );
+                },
+              );
+            },
           );
         },
-        ),
-      );
-
+      ),
+    );
   }
 }
