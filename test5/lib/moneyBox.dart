@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MoneyBox extends StatelessWidget {
   // const MoneyBo({super.key});
@@ -6,7 +7,6 @@ class MoneyBox extends StatelessWidget {
   String title;
   double amount;
   double sizeConHeight;
-  // double sizeConWidth ;
   Color colors;
   double borderradius;
 
@@ -14,7 +14,6 @@ class MoneyBox extends StatelessWidget {
     required this.title,
     required this.amount,
     required this.sizeConHeight,
-    // required this.sizeConWidth,
     required this.colors,
     required this.borderradius,
   });
@@ -36,16 +35,16 @@ class MoneyBox extends StatelessWidget {
             ' $title',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 30,
+              fontSize: 28,
               fontWeight: FontWeight.w900,
             ),
           ),
           Expanded(
             child: Text(
-              ' $amount  ',
+              '${NumberFormat("##,###,###,###.##").format(amount)} Baht ',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 30,
+                fontSize: 24,
                 fontWeight: FontWeight.w900,
               ),
               textAlign: TextAlign.right,
